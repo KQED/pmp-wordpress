@@ -247,7 +247,8 @@ function pmp_publish_and_push_to_pmp_button($post) {
 	if ($pmp_guid && !$pmp_mine) return;
 
 	// Base display/disabled on post status
-	$is_disabled = ($post->post_status != 'publish');
+	$publishable_status = apply_filters( 'pmp_publishable_status', array( 'publish' ) );
+	$is_disabled = ! in_array( $post->post_status, $publishable_status, true );
 	if ($is_disabled) {
 		$helper_text = 'You must publish first!';
 	}
