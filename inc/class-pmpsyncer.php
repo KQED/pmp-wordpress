@@ -296,13 +296,15 @@ abstract class PmpSyncer {
    * @return boolean success
    */
   protected function pull_post_metadata() {
-    $this->post_meta['pmp_guid']      = $this->doc->attributes->guid;
-    $this->post_meta['pmp_created']   = $this->doc->attributes->created;
-    $this->post_meta['pmp_modified']  = $this->doc->attributes->modified;
-    $this->post_meta['pmp_published'] = $this->doc->attributes->published;
-    $this->post_meta['pmp_writeable'] = ($this->doc->scope == 'write') ? 'yes' : 'no';
-    $this->post_meta['pmp_byline']    = isset($this->doc->attributes->byline) ? $this->doc->attributes->byline : null;
-    $this->post_meta['pmp_subscribe_to_updates'] = 'on'; // default
+    $post_meta                  = array();
+    $post_meta['pmp_guid']      = $this->doc->attributes->guid;
+    $post_meta['pmp_created']   = $this->doc->attributes->created;
+    $post_meta['pmp_modified']  = $this->doc->attributes->modified;
+    $post_meta['pmp_published'] = $this->doc->attributes->published;
+    $post_meta['pmp_writeable'] = ($this->doc->scope == 'write') ? 'yes' : 'no';
+    $post_meta['pmp_byline']    = isset($this->doc->attributes->byline) ? $this->doc->attributes->byline : null;
+    $post_meta['pmp_subscribe_to_updates'] = 'on'; // default
+    $this->post_meta = apply_filters( 'pmp_pull_post_meta', $post_meta );
     foreach ($this->post_meta as $key => $val) {
       update_post_meta($this->post->ID, $key, $val);
     }
